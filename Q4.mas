@@ -1,0 +1,177 @@
+﻿/Jing Lyu 20235791 2020-2021 CT861 assignment1 Q4
+Input
+Store A
+Input 
+Store B
+JnS FuncBin
+Load result3
+Output 
+Halt
+
+/daddy function
+/result3=Bin(A,B)=A!/B!(A-B)!
+FuncBin, HEX 000
+	Clear
+	Store result3
+	Load B
+	Skipcond 000/skip next line if B<0
+	Jump bnext1
+	Jump exitFuncBin/exit if B<0
+    
+bnext1, Load A
+	Subt B
+	Skipcond 000/skip next line if (A-B)<0
+	Jump bnext2
+	Jump exitFuncBin/exit if (A-B)<0
+    
+/nominator   
+bnext2, Load A
+	Store N
+	JnS FuncFact
+	Load result2
+	Store nom/denominator
+	Load B
+	Store N
+	JnS FuncFact
+	Load result2
+	Store denom1
+
+	
+	Load A
+	Subt B
+	Store N
+	JnS FuncFact
+	Load result2
+	Store denom2
+	Store Y
+	Load denom1
+	Store X
+	
+	JnS FuncMultiply/B!(A-B)!
+	Load result
+	Store denom1/store B!(A-B)! to denom1
+	Store Y
+	Load nom
+	Store X
+	JnS FuncDiv
+	Load result
+	Store result3
+/ exit FuncBin   
+exitFuncBin, JumpI FuncBin
+
+
+/result2=N!
+FuncFact, HEX 000 /store return address
+Load one
+Store result2
+	Load N
+floop, Skipcond 400 /skip nextl if N==0
+	Jump fnext
+	Jump exitFuncFact/finished
+fnext, Store X
+	Load result2
+	Store Y
+	JnS FuncMultiply/product stored in result
+	Load result
+	Store result2
+	Load N
+	Subt one
+    Store N
+	Jump floop
+	
+exitFuncFact, JumpI FuncFact
+
+/result=x/y basic subtration to calculate quotient
+FuncDiv, HEX 000
+Clear
+Store result
+dloop, load X
+	Subt Y
+	Skipcond 000/ skip to next instruction if X<0
+	Jump next1
+	Jump exitFuncDiv/ X<0 calculation done
+
+next1, Store X
+	Load result
+	Add one/increment result
+	Store result
+	Load X	/exit if x==0
+	Subt Y
+	Skipcond 400/skip next instruction if x==0
+	Jump dloop
+	Load result/increment result as x==0
+	Add one
+	Store result
+/exitFuncDiv	
+exitFuncDiv, JumpI FuncDiv
+
+
+/result=X*Y
+FuncMultiply, HEX 000/store return value
+Clear
+Store result
+
+/check if Y is negative, if so set negative flag
+Load Y
+Skipcond 000
+Jump nonneg
+
+Subt Y
+Subt Y
+Store Y
+Clear
+Add one
+Store negflag
+Clear
+Jump loop
+
+nonneg, Clear
+	Store negflag /check if Y is zero, if it is, then jump to halt
+	Load Y
+	Skipcond 400
+	Jump loop /false
+	Jump halt /true
+
+/iterative addition	
+loop, Load result
+	Add X
+	Store result
+	
+
+	Load Y
+	Subt one
+	Store Y
+	
+	Skipcond 400/check if multiply finished
+	Jump loop/no, repeat the loop
+    /yes, exit loop
+    
+/check for negative value	
+Load negflag
+Skipcond 800
+Jump halt
+
+/negate the result		
+Load result
+Subt result
+Subt result
+Store result
+
+/exit FuncMultiply
+halt, JumpI FuncMultiply
+    
+/declear variables
+X, DEC 0
+Y, DEC 0
+N, DEC 0
+A, DEC 0
+B, DEC 0
+one, DEC 1
+negflag, DEC 0
+result, DEC 0
+result2, DEC 0
+result3, DEC 0
+nom, DEC 0
+denom1, DEC 0
+denom2, DEC 0
+
