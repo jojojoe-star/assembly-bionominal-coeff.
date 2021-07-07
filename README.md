@@ -1,6 +1,6 @@
 # assembly-bionominal-coeff.
 
-Simple piece of code calculate bionominal coeff. of 2 entered integer number.
+A simple piece of code calculate binominal coeff. of 2 entered integer number.
 
 Run on a stimulator based on Javascript:
 
